@@ -4,8 +4,8 @@
 set -e
 
 # bin/compile <build-dir> <cache-dir>
-build_dir=$1
-cache_dir=$2
+build_dir=.
+cache_dir=.
 
 $build_dir/deploy/kbuild $build_dir $cache_dir
 
@@ -67,7 +67,7 @@ export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"
 
 #PROFILE_K="$build_dir/.profile.d/k.sh"
 #mkdir -p $(dirname $PROFILE_K)
-#echo '[ -s \"~/.kre/kvm/kvm.sh\" ] && . \"~/.kre/kvm/kvm.sh\" # Load kvm' >> $PROFILE_K
+#echo '[ -s \"~/.k/kvm/kvm.sh\" ] && . \"~/.k/kvm/kvm.sh\" # Load kvm' >> $PROFILE_K
 
 
 # Add certs to trust store
@@ -80,19 +80,19 @@ export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"
 
 ## TODO ------------------------------------------------------------------------
 #remote: -----> Install KVM...
-#remote: Downloading kvm as script to '/app/.kre/kvm'
+#remote: Downloading kvm as script to '/app/.k/kvm'
 #remote:
 #remote: Profile not found. Tried ~/.bash_profile ~/.zshrc and ~/.profile.
 #remote: Create one of them and run this script again
 #remote:   OR
 #remote: Append the following line to the correct file yourself:
 #remote:
-#remote:  [ -s "/app/.kre/kvm/kvm.sh" ] && . "/app/.kre/kvm/kvm.sh" # Load kvm
+#remote:  [ -s "/app/.k/kvm/kvm.sh" ] && . "/app/.k/kvm/kvm.sh" # Load kvm
 #remote:
-#remote: Type 'source /app/.kre/kvm/kvm.sh' to start using kvm
+#remote: Type 'source /app/.k/kvm/kvm.sh' to start using kvm
 ## ------------------------------------------------------------------------------
 echo "-----> ~/.profile CAT..."
-echo "[ -s \"~/.kre/kvm/kvm.sh\" ] && . \"~/.kre/kvm/kvm.sh\" # Load kvm" > ~/.profile
+echo "[ -s \"~/.k/kvm/kvm.sh\" ] && . \"~/.k/kvm/kvm.sh\" # Load kvm" > ~/.profile
 cat ~/.profile
 
 echo "-----> MONO VERSION:"
@@ -106,7 +106,7 @@ yes | certmgr -ssl "https://www.nuget.org"
 
 # 2. Install KVM
 echo "-----> Install KVM..."
-curl -sSL https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.sh | sh && source ~/.k/kvm/kvm.sh
+curl -sSL which| sh && source ~/.k/kvm/kvm.sh
 
 # 3. Install KRE
 echo "-----> Install KRE..."
