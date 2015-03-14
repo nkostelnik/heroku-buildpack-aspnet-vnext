@@ -106,6 +106,8 @@ yes | certmgr -ssl "https://www.nuget.org"
 
 # 2. Install KVM
 echo "-----> Install KVM..."
+export ${cache_dir}/.k
+ln -s "${cache_dir}/.k" /app
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.sh | sh && source ~/.k/kvm/kvm.sh
 
 # 3. Install KRE
