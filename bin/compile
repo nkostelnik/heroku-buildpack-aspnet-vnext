@@ -91,10 +91,9 @@ export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"
 #remote:
 #remote: Type 'source /app/.k/kvm/kvm.sh' to start using kvm
 ## ------------------------------------------------------------------------------
-echo "-----> $build_dir/.profile CAT..."
-echo "[ -s \"/app/.k/kvm/kvm.sh\" ] && . \"/app/.k/kvm/kvm.sh\" # Load kvm" > $build_dir/.profile
-ln -s $build_dir/.profile /app
-cat /app/.profile
+mkdir -p $build_dir/.profile.d
+ln -s $build_dir/.profile.d /app
+echo "[ -s \"/app/.k/kvm/kvm.sh\" ] && . \"/app/.k/kvm/kvm.sh\" # Load kvm" > $build_dir/.profile.d/kvm.sh
 
 echo "-----> MONO VERSION:"
 mono --version
@@ -112,6 +111,7 @@ export KRE_USER_HOME="$build_dir/.k"
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.sh | sh
 ln -s "$KRE_USER_HOME" /app
 source "$KRE_USER_HOME/kvm/kvm.sh"
+
 
 # 3. Install KRE
 echo "-----> Install KRE..."
