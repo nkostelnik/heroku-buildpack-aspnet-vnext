@@ -4,13 +4,10 @@
 set -e
 
 # bin/compile <build-dir> <cache-dir>
-build_dir=.
-cache_dir=.
+build_dir=$1
+cache_dir=$2
 
-
-echo "       $MONO_CACHE_LOCATION"
-
-# $build_dir/deploy/kbuild $build_dir $cache_dir
+$build_dir/deploy/kbuild $build_dir $cache_dir
 
 # Expected steps in k.build file
 ## 1. Install Mono >= 3.4.1 (3.8.0 recommended)
@@ -109,7 +106,7 @@ yes | certmgr -ssl "https://www.nuget.org"
 
 # 2. Install KVM
 echo "-----> Install KVM..."
-curl -sSL which| sh && source ~/.k/kvm/kvm.sh
+curl -sSL https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.sh | sh && source ~/.k/kvm/kvm.sh
 
 # 3. Install KRE
 echo "-----> Install KRE..."
