@@ -1,136 +1,136 @@
-#!/usr/bin/env bash
+# #!/usr/bin/env bash
 
-# fail fast
-set -e
+# # fail fast
+# set -e
 
-# bin/compile <build-dir> <cache-dir>
-build_dir=$1
-cache_dir=$2
+# # bin/compile <build-dir> <cache-dir>
+# build_dir=$1
+# cache_dir=$2
 
-$build_dir/deploy/kbuild $build_dir $cache_dir
+# $build_dir/deploy/kbuild $build_dir $cache_dir
 
-# Expected steps in k.build file
-## 1. Install Mono >= 3.4.1 (3.8.0 recommended)
-## 2. Install KVM
-## 3. Install KRE
-## 4. Prepare Procfile
-##    Ex: {
-##      echo "web: k web" > $build_dir/Procfile
-##    }
-
-
-# kbuild sample usage ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-# -----------------------------------------------------------
-
-# 1. Install Mono >= 3.4.1 (3.8.0 recommended)
-########## https://github.com/friism/heroku-buildpack-mono/blob/master/bin/compile
-DEPENDENCY_S3_BUCKET_PATH="http://s3.amazonaws.com/mono-dependencies"
-MONO_VERSION="3.10.0"
-STACK="cedar-14"
-
-function conditional_download() {
-  DOWNLOAD_URL="$1"
-  DESTINATION="$2"
-
-  if [ ! -d ${DESTINATION} ]; then
-    rm -rf ${DESTINATION}
-    mkdir -p ${DESTINATION}
-    echo "-----> Downloading ${DOWNLOAD_URL}"
-    curl ${DOWNLOAD_URL} -s | tar xz -C ${DESTINATION}
-  fi
-}
-
-LP_DIR=`cd $(dirname $0); cd ..; pwd`
-
-echo "-----> LP_DIR:"
-echo "       $LP_DIR"
-
-cd ${build_dir}
-mkdir -p ${cache_dir}
-
-MONO_CACHE_LOCATION=${cache_dir}/${STACK}/mono-${MONO_VERSION}
-#http://s3.amazonaws.com/mono-dependencies/cedar-14/mono-3.10.0.tar.gz
-conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/mono-${MONO_VERSION}.tar.gz ${MONO_CACHE_LOCATION}
-
-# Copy mono from cache to where we're building the slug
-cp -r "${MONO_CACHE_LOCATION}/mono" .
-# Mono expects to be running out of /app
-ln -s "$build_dir/mono" /app
-
-export PATH="/app/mono/bin:${PATH}"
-export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"
-
-#PROFILE_MONO="$build_dir/.profile.d/mono.sh"
-#mkdir -p $(dirname $PROFILE_MONO)
-#echo 'export PATH="/app/mono/bin:${PATH}"' >> $PROFILE_MONO
-#echo 'export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"' >> $PROFILE_MONO
-
-#PROFILE_K="$build_dir/.profile.d/k.sh"
-#mkdir -p $(dirname $PROFILE_K)
-#echo '[ -s \"~/.k/kvm/kvm.sh\" ] && . \"~/.k/kvm/kvm.sh\" # Load kvm' >> $PROFILE_K
+# # Expected steps in k.build file
+# ## 1. Install Mono >= 3.4.1 (3.8.0 recommended)
+# ## 2. Install KVM
+# ## 3. Install KRE
+# ## 4. Prepare Procfile
+# ##    Ex: {
+# ##      echo "web: k web" > $build_dir/Procfile
+# ##    }
 
 
-# Add certs to trust store
-#cp -r ${LP_DIR}/.config ~/.
-#cp -r ${LP_DIR}/.config ${build_dir}/.
+# # kbuild sample usage ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# # -----------------------------------------------------------
 
-#mkdir -p ${build_dir}/.profile.d
-#cp -n ${LP_DIR}/.profile.d/* ${build_dir}/.profile.d/
+# # 1. Install Mono >= 3.4.1 (3.8.0 recommended)
+# ########## https://github.com/friism/heroku-buildpack-mono/blob/master/bin/compile
+# DEPENDENCY_S3_BUCKET_PATH="http://s3.amazonaws.com/mono-dependencies"
+# MONO_VERSION="3.10.0"
+# STACK="cedar-14"
+
+# function conditional_download() {
+#   DOWNLOAD_URL="$1"
+#   DESTINATION="$2"
+
+#   if [ ! -d ${DESTINATION} ]; then
+#     rm -rf ${DESTINATION}
+#     mkdir -p ${DESTINATION}
+#     echo "-----> Downloading ${DOWNLOAD_URL}"
+#     curl ${DOWNLOAD_URL} -s | tar xz -C ${DESTINATION}
+#   fi
+# }
+
+# LP_DIR=`cd $(dirname $0); cd ..; pwd`
+
+# echo "-----> LP_DIR:"
+# echo "       $LP_DIR"
+
+# cd ${build_dir}
+# mkdir -p ${cache_dir}
+
+# MONO_CACHE_LOCATION=${cache_dir}/${STACK}/mono-${MONO_VERSION}
+# #http://s3.amazonaws.com/mono-dependencies/cedar-14/mono-3.10.0.tar.gz
+# conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/mono-${MONO_VERSION}.tar.gz ${MONO_CACHE_LOCATION}
+
+# # Copy mono from cache to where we're building the slug
+# cp -r "${MONO_CACHE_LOCATION}/mono" .
+# # Mono expects to be running out of /app
+# ln -s "$build_dir/mono" /app
+
+# export PATH="/app/mono/bin:${PATH}"
+# export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"
+
+# #PROFILE_MONO="$build_dir/.profile.d/mono.sh"
+# #mkdir -p $(dirname $PROFILE_MONO)
+# #echo 'export PATH="/app/mono/bin:${PATH}"' >> $PROFILE_MONO
+# #echo 'export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"' >> $PROFILE_MONO
+
+# #PROFILE_K="$build_dir/.profile.d/k.sh"
+# #mkdir -p $(dirname $PROFILE_K)
+# #echo '[ -s \"~/.k/kvm/kvm.sh\" ] && . \"~/.k/kvm/kvm.sh\" # Load kvm' >> $PROFILE_K
 
 
-## TODO ------------------------------------------------------------------------
-#remote: -----> Install KVM...
-#remote: Downloading kvm as script to '/app/.k/kvm'
-#remote:
-#remote: Profile not found. Tried ~/.bash_profile ~/.zshrc and ~/.profile.
-#remote: Create one of them and run this script again
-#remote:   OR
-#remote: Append the following line to the correct file yourself:
-#remote:
-#remote:  [ -s "/app/.k/kvm/kvm.sh" ] && . "/app/.k/kvm/kvm.sh" # Load kvm
-#remote:
-#remote: Type 'source /app/.k/kvm/kvm.sh' to start using kvm
-## ------------------------------------------------------------------------------
-echo "-----> ~/.profile CAT..."
-echo "[ -s \"~/.k/kvm/kvm.sh\" ] && . \"~/.k/kvm/kvm.sh\" # Load kvm" > ~/.profile
-cat ~/.profile
+# # Add certs to trust store
+# #cp -r ${LP_DIR}/.config ~/.
+# #cp -r ${LP_DIR}/.config ${build_dir}/.
 
-echo "-----> MONO VERSION:"
-mono --version
-
-echo "-----> Updating SSL certificates..."
-mozroots --import --sync
-yes | certmgr -ssl "https://www.myget.org"
-yes | certmgr -ssl "https://www.nuget.org"
+# #mkdir -p ${build_dir}/.profile.d
+# #cp -n ${LP_DIR}/.profile.d/* ${build_dir}/.profile.d/
 
 
-# 2. Install KVM
-echo "-----> Install KVM..."
-export KRE_USER_HOME="/app/.k"
-curl -sSL https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.sh | sh && source ~/.k/kvm/kvm.sh
+# ## TODO ------------------------------------------------------------------------
+# #remote: -----> Install KVM...
+# #remote: Downloading kvm as script to '/app/.k/kvm'
+# #remote:
+# #remote: Profile not found. Tried ~/.bash_profile ~/.zshrc and ~/.profile.
+# #remote: Create one of them and run this script again
+# #remote:   OR
+# #remote: Append the following line to the correct file yourself:
+# #remote:
+# #remote:  [ -s "/app/.k/kvm/kvm.sh" ] && . "/app/.k/kvm/kvm.sh" # Load kvm
+# #remote:
+# #remote: Type 'source /app/.k/kvm/kvm.sh' to start using kvm
+# ## ------------------------------------------------------------------------------
+# echo "-----> ~/.profile CAT..."
+# echo "[ -s \"~/.k/kvm/kvm.sh\" ] && . \"~/.k/kvm/kvm.sh\" # Load kvm" > ~/.profile
+# cat ~/.profile
 
-# 3. Install KRE
-echo "-----> Install KRE..."
-kvm upgrade
+# echo "-----> MONO VERSION:"
+# mono --version
 
-# # 3.1 Restore project packages...
-# echo "-----> Restore project packages..."
-# kpm restore
+# echo "-----> Updating SSL certificates..."
+# mozroots --import --sync
+# yes | certmgr -ssl "https://www.myget.org"
+# yes | certmgr -ssl "https://www.nuget.org"
 
-# # 4. Prepare Procfile
-# #echo "-----> Procfile..."
-# #echo "       $build_dir/Procfile"
 
-# #echo "-----> Aguardando release"
-# #echo "web: k web --server.urls http://0.0.0.0" > $build_dir/Procfile
+# # 2. Install KVM
+# echo "-----> Install KVM..."
+# export KRE_USER_HOME="/app/.k"
+# curl -sSL https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.sh | sh && source ~/.k/kvm/kvm.sh
 
-# #echo "-----> Procfile CAT..."
-# #cat $build_dir/Procfile
+# # 3. Install KRE
+# echo "-----> Install KRE..."
+# kvm upgrade
 
-# # default Procfile
-# if [ ! -r $build_dir/Procfile ]; then
-#     echo "       No Procfile; using \"web: sh k web --server.urls http://0.0.0.0:80\"."
-#     echo "web: sh k web --server.urls http://0.0.0.0:80" > $build_dir/Procfile
-# fi
+# # # 3.1 Restore project packages...
+# # echo "-----> Restore project packages..."
+# # kpm restore
 
-# echo "-----> Build SUCCESS"
+# # # 4. Prepare Procfile
+# # #echo "-----> Procfile..."
+# # #echo "       $build_dir/Procfile"
+
+# # #echo "-----> Aguardando release"
+# # #echo "web: k web --server.urls http://0.0.0.0" > $build_dir/Procfile
+
+# # #echo "-----> Procfile CAT..."
+# # #cat $build_dir/Procfile
+
+# # # default Procfile
+# # if [ ! -r $build_dir/Procfile ]; then
+# #     echo "       No Procfile; using \"web: sh k web --server.urls http://0.0.0.0:80\"."
+# #     echo "web: sh k web --server.urls http://0.0.0.0:80" > $build_dir/Procfile
+# # fi
+
+# # echo "-----> Build SUCCESS"
