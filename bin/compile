@@ -91,8 +91,8 @@ export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"
 #remote:
 #remote: Type 'source /app/.k/kvm/kvm.sh' to start using kvm
 ## ------------------------------------------------------------------------------
-echo "[ -s \"/app/.k/kvm/kvm.sh\" ] && . \"/app/.k/kvm/kvm.sh\" # Load kvm" > .profile.d/kvm.sh
-echo "echo \"Hello World!\"" > .profile.d/test.sh
+echo "[ -s \"/app/.k/kvm/kvm.sh\" ] && . \"/app/.k/kvm/kvm.sh\" # Load kvm" > ${build_dir}/.profile.d/kvm.sh
+echo "echo \"Hello World!\"" > ${build_dir}/.profile.d/test.sh
 
 echo "-----> MONO VERSION:"
 mono --version
