@@ -7,6 +7,8 @@ set -e
 build_dir=.
 cache_dir=.
 
+echo $MONO_CACHE_LOCATION
+
 # $build_dir/deploy/kbuild $build_dir $cache_dir
 
 # Expected steps in k.build file
