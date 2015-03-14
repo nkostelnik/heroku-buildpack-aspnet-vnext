@@ -1,2 +1,2 @@
 echo "Running KVM script"
-/app/.k/kvm/kvm.sh
+sh /app/.k/kvm/kvm.sh
