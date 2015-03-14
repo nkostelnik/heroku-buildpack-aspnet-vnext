@@ -112,7 +112,10 @@ curl -sSL https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.sh | s
 echo "-----> Install KRE..."
 kvm upgrade
 
-# 3.1 Restore project packages...
+# 3.1 Test k
+k
+
+# 3.2 Restore project packages...
 echo "-----> Restore project packages..."
 kpm restore
 
