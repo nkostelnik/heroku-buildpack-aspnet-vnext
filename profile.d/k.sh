@@ -1,2 +1,2 @@
-echo "Running KVM script"
-sh /app/.k/kvm/kvm.sh
+echo "Sourcing KVM"
+source /app/.k/kvm/kvm.sh
