@@ -58,7 +58,8 @@ cp -r "${MONO_CACHE_LOCATION}/mono" .
 ln -s "$build_dir/mono" /app
 
 echo "making bla"
-mkdir /app/bla
+mkdir bla
+ln -s "$build_dir/bla" /app
 
 # export PATH="/app/mono/bin:${PATH}"
 # export LD_LIBRARY_PATH="/app/mono/lib:${LD_LIBRARY_PATH}"
