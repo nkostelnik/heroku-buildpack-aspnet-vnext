@@ -8,8 +8,7 @@ cache_dir=$2
 
 $build_dir/deploy/kbuild $build_dir $cache_dir
 
-# 1. Install Mono >= 3.4.1 (3.8.0 recommended)
-########## https://github.com/friism/heroku-buildpack-mono/blob/master/bin/compile
+# 1. Install Mono
 DEPENDENCY_S3_BUCKET_PATH="http://s3.amazonaws.com/mono-dependencies"
 MONO_VERSION="3.10.0"
 LIBUV_VERSION="1.2.0"
@@ -68,7 +67,6 @@ curl -sSL https://raw.githubusercontent.com/aspnet/Home/master/kvminstall.sh | s
 ln -s "$KRE_USER_HOME" /app
 source "$KRE_USER_HOME/kvm/kvm.sh"
 
-
 # 3. Install KRE
 echo "-----> Install KRE..."
 kvm upgrade
@@ -78,10 +76,9 @@ echo "-----> Restore project packages..."
 kpm restore
 
 # 4. Prepare Procfile
-# default Procfile
 if [ ! -r $build_dir/Procfile ]; then
-    echo "       No Procfile; using \"web: k kestrel --port \$PORT\"."
-    echo "web: k kestrel --port \$PORT" > $build_dir/Procfile
+    echo "       No Procfile; using \"web: k kestrel --server.urls http://localhost:\$PORT\"."
+    echo "web: k kestrel --server.urls http://localhost:\$PORT\"" > $build_dir/Procfile
 fi
 
 echo "-----> Build SUCCESS"
