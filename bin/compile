@@ -81,7 +81,7 @@ kpm restore
 # default Procfile
 if [ ! -r $build_dir/Procfile ]; then
     echo "       No Procfile; using \"web: k kestrel --port \$PORT\"."
-    echo "web: k kestrel --port $PORT" > $build_dir/Procfile
+    echo "web: k kestrel --port \$PORT" > $build_dir/Procfile
 fi
 
 echo "-----> Build SUCCESS"
