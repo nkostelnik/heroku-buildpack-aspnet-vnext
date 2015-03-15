@@ -78,19 +78,10 @@ echo "-----> Restore project packages..."
 kpm restore
 
 # 4. Prepare Procfile
-#echo "-----> Procfile..."
-#echo "       $build_dir/Procfile"
-
-#echo "-----> Aguardando release"
-#echo "web: k web --server.urls http://0.0.0.0" > $build_dir/Procfile
-
-#echo "-----> Procfile CAT..."
-#cat $build_dir/Procfile
-
 # default Procfile
 if [ ! -r $build_dir/Procfile ]; then
     echo "       No Procfile; using \"web: sh k web --server.urls http://0.0.0.0:80\"."
-    echo "web: k web --server.urls http://0.0.0.0:80" > $build_dir/Procfile
+    echo "web: k kestrel --server.urls http://0.0.0.0:80" > $build_dir/Procfile
 fi
 
 echo "-----> Build SUCCESS"
