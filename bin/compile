@@ -80,8 +80,8 @@ kpm restore
 # 4. Prepare Procfile
 # default Procfile
 if [ ! -r $build_dir/Procfile ]; then
-    echo "       No Procfile; using \"web: sh k web --server.urls http://0.0.0.0:80\"."
-    echo "web: k kestrel --server.urls http://0.0.0.0:80" > $build_dir/Procfile
+    echo "       No Procfile; using \"web: k kestrel --server.urls http://0.0.0.0:$PORT\"."
+    echo "web: k kestrel --server.urls http://0.0.0.0:$PORT" > $build_dir/Procfile
 fi
 
 echo "-----> Build SUCCESS"
