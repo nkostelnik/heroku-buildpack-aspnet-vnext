@@ -2,3 +2,8 @@
 
 # bin/release <build-dir>
 build_dir=$1
+
+cat <<EOF
+default_process_types:
+  web: k kestrel http://0.0.0.0:\$PORT
+EOF
